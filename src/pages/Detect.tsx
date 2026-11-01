@@ -1,6 +1,6 @@
 
 import { useState } from 'react';
-import { Eraser, Sparkles, Send, ShieldAlert } from 'lucide-react';
+import { Eraser, Sparkles, Send, ShieldAlert, Info } from 'lucide-react';
 import DashboardLayout from '@/components/layout/DashboardLayout';
 import Button from '@/components/ui/Button';
 import AlertMessage from '@/components/ui/AlertMessage';
@@ -152,14 +152,25 @@ export default function Detect() {
 
           {/* Evidence Search Results */}
           <section className="mt-6 card-base p-6">
-          <h2 className="text-lg font-semibold text-navy-900">
-  Retrieved Web Evidence
-</h2>
+            <h2 className="text-lg font-semibold text-navy-900">
+              Retrieved Web Evidence
+            </h2>
 
-<p className="mt-2 text-sm text-gray-500">
-  These sources were retrieved from a web search. They provide reference
-  material but have not been independently verified by TruthLens.
-</p>
+            <p className="mt-2 text-sm text-gray-500">
+              These sources were retrieved through a web search. They
+              provide reference material but have not been independently
+              verified by TruthLens.
+            </p>
+
+            <div className="mt-3 flex items-start gap-2 rounded-lg bg-blue-50 border border-blue-200 p-3">
+              <Info className="h-5 w-5 text-blue-600 flex-shrink-0 mt-0.5" />
+              <p className="text-xs text-blue-800 leading-relaxed">
+                Search relevance indicates how closely a result matches
+                your search query. It does not indicate whether the source
+                supports or contradicts the claim.
+              </p>
+            </div>
+
             {evidenceLoading && (
               <p className="mt-3 text-sm text-blue-600">
                 Searching the web and retrieving relevant sources...
@@ -178,7 +189,7 @@ export default function Detect() {
 
             {evidenceResult && (
               <>
-                <p className="mt-2 text-sm text-navy-500">
+                <p className="mt-3 text-sm text-navy-500">
                   {evidenceResult.message}
                 </p>
 
@@ -201,22 +212,32 @@ export default function Detect() {
                           {index + 1}. {source.title || 'Untitled source'}
                         </h3>
 
-                        <p className="mt-2 text-sm text-gray-600">
+                        <p className="mt-2 text-sm text-gray-600 whitespace-pre-line">
                           {source.content}
                         </p>
 
                         {source.published_date && (
-                          <p className="mt-2 text-xs text-gray-400">
+                          <p className="mt-2 text-xs text-gray-500">
                             Published: {source.published_date}
                           </p>
                         )}
 
-                        <p className="mt-2 text-xs text-gray-400">
-                         Search relevance score:{' '}
-                          {typeof source.score === 'number'
-                            ? source.score.toFixed(2)
-                            : 'Not available'}
-                        </p>
+                        <div className="mt-3 rounded-md bg-gray-50 p-3">
+                          <p className="text-xs font-medium text-navy-700">
+                            Search relevance score
+                          </p>
+
+                          <p className="mt-1 text-sm font-semibold text-navy-900">
+                            {typeof source.score === 'number'
+                              ? source.score.toFixed(2)
+                              : 'Not available'}
+                          </p>
+
+                          <p className="mt-1 text-xs text-gray-500">
+                            This score measures search relevance only.
+                            It is not a truth or accuracy score.
+                          </p>
+                        </div>
 
                         {/^https?:\/\//i.test(source.url) && (
                           <a
@@ -245,9 +266,10 @@ export default function Detect() {
           <div className="mt-4 flex items-start gap-2.5 bg-warning-50 border border-warning-200 rounded-lg p-4">
             <ShieldAlert className="h-5 w-5 text-warning-600 flex-shrink-0 mt-0.5" />
             <p className="text-sm text-warning-800 leading-relaxed">
-              The ML prediction is based on learned text patterns, not
-              confirmed factual truth. Retrieved sources are reference
-              material and have not been independently verified.
+              Retrieved sources may support, contradict, or simply discuss
+              the submitted claim. TruthLens does not automatically
+              determine which of these applies. Review reliable sources
+              before reaching a conclusion.
             </p>
           </div>
         </div>

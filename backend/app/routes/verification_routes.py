@@ -58,9 +58,27 @@ def evidence_search():
             seen_urls.add(normalized_url)
             unique_results.append(result)
 
-    results = unique_results
+    # Step 3: Filter and rank results by relevance score.
+    relevant_results = []
 
-    # Step 3: Extract relevant webpage excerpts.
+    for result in unique_results:
+        score = result.get("score")
+
+        try:
+            score = float(score)
+        except (TypeError, ValueError):
+            continue
+
+        if score >= 0.50:
+            relevant_results.append(result)
+
+    results = sorted(
+        relevant_results,
+        key=lambda item: float(item.get("score", 0)),
+        reverse=True
+    )[:5]
+
+    # Step 4: Extract relevant webpage excerpts.
     urls = [
         result["url"]
         for result in results
@@ -84,7 +102,7 @@ def evidence_search():
         # Use search snippets if webpage extraction fails.
         pass
 
-    # Step 4: Prepare the final evidence sources.
+    # Step 5: Prepare the final evidence sources.
     sources = []
 
     for result in results:
