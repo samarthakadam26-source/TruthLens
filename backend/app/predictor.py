@@ -1,4 +1,5 @@
-"""Load the LIAR model and predict political-claim labels."""
+
+"""Load the WELFake model and predict news article labels."""
 
 from pathlib import Path
 
@@ -7,10 +8,9 @@ import joblib
 from app.preprocess import preprocess_text
 
 
-# Load the new model files without overwriting the original model.
 MODEL_DIR = Path(__file__).resolve().parents[1] / "models"
-MODEL_PATH = MODEL_DIR / "liar_model.joblib"
-VECTORIZER_PATH = MODEL_DIR / "liar_vectorizer.joblib"
+MODEL_PATH = MODEL_DIR / "welfake_experimental_model.joblib"
+VECTORIZER_PATH = MODEL_DIR / "welfake_experimental_vectorizer.joblib"
 
 
 class ModelNotTrainedError(Exception):
@@ -18,10 +18,11 @@ class ModelNotTrainedError(Exception):
 
 
 def _load_artifacts():
-    """Load the LIAR model and vectorizer."""
+    """Load the WELFake model and vectorizer."""
     if not MODEL_PATH.exists() or not VECTORIZER_PATH.exists():
         raise ModelNotTrainedError(
-            "The LIAR model is missing. Run train_model.py first."
+            "The WELFake model is missing. "
+            "Ensure its model files are present in backend/models."
         )
 
     vectorizer = joblib.load(VECTORIZER_PATH)
@@ -31,7 +32,7 @@ def _load_artifacts():
 
 
 def predict_news(text: str):
-    """Return (label, confidence) for a political claim."""
+    """Return (label, confidence) for a news article."""
     if not text or not text.strip():
         raise ValueError("News text is empty.")
 

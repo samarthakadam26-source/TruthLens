@@ -43,3 +43,4 @@ instance/
 .bolt/
 # Large training dataset (kept locally)
 backend/dataset/news.csv
+dataset/WELFake_Cleaned.csv

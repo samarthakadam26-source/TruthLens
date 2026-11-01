@@ -152,10 +152,14 @@ export default function Detect() {
 
           {/* Evidence Search Results */}
           <section className="mt-6 card-base p-6">
-            <h2 className="text-lg font-semibold text-navy-900">
-              Web Evidence & Sources
-            </h2>
+          <h2 className="text-lg font-semibold text-navy-900">
+  Retrieved Web Evidence
+</h2>
 
+<p className="mt-2 text-sm text-gray-500">
+  These sources were retrieved from a web search. They provide reference
+  material but have not been independently verified by TruthLens.
+</p>
             {evidenceLoading && (
               <p className="mt-3 text-sm text-blue-600">
                 Searching the web and retrieving relevant sources...
@@ -208,7 +212,7 @@ export default function Detect() {
                         )}
 
                         <p className="mt-2 text-xs text-gray-400">
-                          Search relevance:{' '}
+                         Search relevance score:{' '}
                           {typeof source.score === 'number'
                             ? source.score.toFixed(2)
                             : 'Not available'}

@@ -1,4 +1,5 @@
-import { CheckCircle2, XCircle, ShieldAlert } from 'lucide-react';
+
+import { CheckCircle2, XCircle, ShieldAlert, Info } from 'lucide-react';
 import { classNames } from '@/utils';
 import type { PredictionResponse } from '@/types';
 
@@ -20,10 +21,18 @@ export default function ResultCard({ result, onReset }: ResultCardProps) {
             isReal ? 'bg-success-100' : 'bg-danger-100'
           )}
         >
-          <Icon className={classNames('h-7 w-7', isReal ? 'text-success-600' : 'text-danger-600')} />
+          <Icon
+            className={classNames(
+              'h-7 w-7',
+              isReal ? 'text-success-600' : 'text-danger-600'
+            )}
+          />
         </div>
+
         <div>
-          <p className="text-sm font-medium text-gray-500 uppercase tracking-wide">Predicted Class</p>
+          <p className="text-sm font-medium text-gray-500 uppercase tracking-wide">
+            ML Model Prediction
+          </p>
           <p
             className={classNames(
               'text-2xl font-bold',
@@ -37,37 +46,58 @@ export default function ResultCard({ result, onReset }: ResultCardProps) {
 
       <p className="text-sm text-navy-600 mb-4">
         {isReal
-          ? 'The model classified this text as likely real based on learned patterns in the training data.'
-          : 'The model classified this text as likely fake based on learned patterns in the training data.'}
+          ? 'The machine learning model classified this text as REAL based on patterns learned during training.'
+          : 'The machine learning model classified this text as FAKE based on patterns learned during training.'}
       </p>
 
       {typeof result.confidence === 'number' && (
         <div className="mb-4">
           <div className="flex items-center justify-between mb-1">
-            <span className="text-sm font-medium text-navy-700">Model confidence</span>
+            <span className="text-sm font-medium text-navy-700">
+              Model confidence score
+            </span>
             <span className="text-sm font-semibold text-navy-900">
               {(result.confidence * 100).toFixed(1)}%
             </span>
           </div>
+
           <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
             <div
               className={classNames(
                 'h-full rounded-full transition-all duration-500',
                 isReal ? 'bg-success-500' : 'bg-danger-500'
               )}
-              style={{ width: `${Math.min(result.confidence * 100, 100)}%` }}
+              style={{
+                width: `${Math.min(
+                  Math.max(result.confidence * 100, 0),
+                  100
+                )}%`
+              }}
             />
           </div>
-          <p className="mt-1 text-xs text-gray-500">
-            This is the model's confidence in its prediction, not the probability that the news is true.
+
+          <p className="mt-2 text-xs text-gray-500">
+            This score represents the model's confidence in its selected
+            class. It is not a calibrated probability that the claim is
+            factually true or false.
           </p>
         </div>
       )}
 
+      <div className="flex items-start gap-2.5 bg-blue-50 border border-blue-200 rounded-lg p-3 mb-4">
+        <Info className="h-5 w-5 text-blue-600 flex-shrink-0 mt-0.5" />
+        <p className="text-xs text-blue-800 leading-relaxed">
+          This prediction is based on the model's training data. Its
+          accuracy may vary depending on the topic and type of claim.
+        </p>
+      </div>
+
       <div className="flex items-start gap-2.5 bg-warning-50 border border-warning-200 rounded-lg p-3 mb-5">
         <ShieldAlert className="h-5 w-5 text-warning-600 flex-shrink-0 mt-0.5" />
         <p className="text-xs text-warning-800 leading-relaxed">
-          This is a machine learning prediction, not a guarantee of factual truth. Verify important claims using reliable sources.
+          Do not treat this prediction as a verified factual verdict.
+          Review reliable sources before deciding whether a claim is true
+          or false.
         </p>
       </div>
 
